@@ -7,34 +7,27 @@
     onShow(option) {
       console.log(option)
       var that = this
-
-      that.$store.state.board.otherHelpId = ''
-      that.$store.state.board.myHelpId = ''
-      that.$store.state.board.actId = ''
-      that.$store.state.board.sessionID = ''
-      if (option.query.actId) {
-        that.$store.state.board.actId = option.query.actId;
-        if (option.query.helpId) {
-          that.$store.state.board.otherHelpId = option.query.helpId;
-
-        }
-        wx.redirectTo({
-          url: '/pages/activePower/main'
-        })
-      }else{
+      var userName = wx.getStorageSync("userName");
+      var password = wx.getStorageSync("password");
+      if(userName&&password){
         wx.getSetting({
           success: function (res) {
             if (res.authSetting['scope.userInfo']) {
               utils.login(that, function (sessionID, actId) {
-
+                wx.redirectTo({
+                  url: '/pages/instrustor/main'
+                })
               })
-
             }else{
               wx.redirectTo({
-                url: '/pages/instrustor/main'
+                url: '/pages/authorize/main'
               })
             }
           }
+        })
+      }else{
+        wx.redirectTo({
+          url: '/pages/authorize/main'
         })
       }
 

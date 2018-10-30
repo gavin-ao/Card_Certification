@@ -5,8 +5,7 @@
 </template>
 
 <script>
-import { formatTime } from '@/utils/index'
-
+  import utils from "../../utils/utils.js";
 export default {
 
   data () {
@@ -14,10 +13,8 @@ export default {
       logs: []
     }
   },
+  onShow(){
 
-  created () {
-    const logs = (wx.getStorageSync('logs') || [])
-    this.logs = logs.map(log => formatTime(new Date(log)))
   }
 }
 </script>

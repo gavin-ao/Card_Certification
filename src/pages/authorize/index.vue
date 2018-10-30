@@ -1,62 +1,92 @@
 <template>
   <div class="vist-userInfo">
-    <!--<web-view src="https://www.hejinkai.com/51talk"></web-view>-->
-    <div :style="{'width':(getWindowWidth-40)+'px'}" class="container">
-      <div class="logo" style="margin-top: 30px;">
-        <img src="/static/images/logo.jpg" alt="">
-        <p style="color: #000;font-size: 18px;">智慧营销</p>
-        <p>分享足迹-更多人了解景点信息</p>
+    <div class="container">
+      <div class="login-icon">
+        <img class="login-img" src="/static/images/bg.png" alt="">
       </div>
-      <p style="border-top:1px solid #ccc;width: 100%;margin: 60px 0 10px 0;"></p>
-      <div class="info">
-        <p>该程序将获得以下授权</p>
-        <p><span class="dot">·</span><span>获得您的公开信息（头像、昵称等）</span></p>
-        <p>(取消授权您可能错过很多功能哦～)</p>
-      </div>
-      <div class="btn">
-        <div>
-          <button open-type="getUserInfo" @getuserinfo="bindGetUserInfo" class="save-btn">立即授权</button>
+      <div class="login-from">
+
+        <!--账号-->
+        <div class="inputView">
+          <img class="nameImage" src="/static/images/user.png"/>
+          <label class="loginLab">账号</label>
+          <input class="inputText" placeholder="请输入账号" @change="phoneInput"/>
+        </div>
+        <div class="line"></div>
+
+        <!--密码-->
+        <div class="inputView">
+          <img class="keyImage" src="/static/images/password.png"/>
+          <label class="loginLab">密码</label>
+          <input class="inputText" password="true" placeholder="请输入密码" @change="passwordInput"/>
+        </div>
+
+        <!--按钮-->
+        <div class="loginBtnView">
+          <button class="loginBtn" type="primary" @click="login">登录</button>
         </div>
       </div>
     </div>
+
 
   </div>
 </template>
 
 <script>
   import utils from "../../utils/utils.js";
+  import md5 from "../../utils/md5.js";
+
   export default {
     data() {
       return {
-
+        userName: '',
+        password: ''
       }
     },
     onLoad(option) {
 
     },
     components: {},
-    computed: {
-      getWindowWidth() {
-        return this.$store.state.board.windowWidth
-      }
-    },
+    computed: {},
     methods: {
-      bindGetUserInfo() {
-        this.login(this);
-      },
-      backHomePage() {
-        var path = this.currentPages + "?scenicSpotId=" + this.scenicSpotId;
-        console.log(this.currentPages)
-        console.log(path)
-        wx.redirectTo({
-          url: "/" + path
-        })
-      },
-      login(){
-        var that = this;
-        utils.login(that);
-      }
 
+
+// 获取输入账号
+      phoneInput: function (e) {
+        console.log(e)
+        this.userName = e.target.value.trim()
+      },
+
+      // 获取输入密码
+      passwordInput: function (e) {
+        console.log(e)
+        this.password = e.target.value.trim()
+      },
+
+      // 登录
+      login: function () {
+        if (this.userName.length == 0 || this.password.length == 0) {
+          wx.showToast({
+            title: '用户名和密码不能为空',
+            icon: 'none',
+            duration: 2000
+          })
+        } else {
+          wx.setStorageSync("userName", this.userName)
+          wx.setStorageSync("password", this.password)
+          // 这里修改成跳转的页面
+          utils.login(this, false, function (sessionID, actId) {
+            console.log(md5.hex_md5(this.password))
+            wx.showToast({
+              title: '登录成功',
+              icon: 'success',
+              duration: 2000
+            })
+          });
+        }
+
+
+      }
     },
     created() {
 
@@ -74,67 +104,78 @@
   .vist-userInfo {
     background-color: #fff;
     justify-content: initial;
+    height: 100%;
+
     .container {
-      margin: 0 auto;
-      font-size: 14px;
-      color: #ccc;
-      .logo {
-        img {
-          display: block;
-          width: 50px;
-          height: 50px;
-          margin: 0 auto;
-        }
-        p {
-          text-align: center;
-        }
-      }
-      .info {
-        width: 100%;
-        font-size: 12px;
-        p {
-          margin-top: 10px;
-          span {
-            display: inline-block;
-            vertical-align: middle;
-          }
-          .dot {
-            /*font-size: 12px;*/
-            font-weight: bold;
-            padding-right: 5px;
-          }
-        }
-      }
-      .btn {
-        width: 100%;
-        margin-top: 60px;
-        div {
-          width: 100%;
-          display: inline-block;
-          text-align: center;
-          button {
-            font-size: 14px;
-            font-family: "Microsoft YaHei UI Light";
-            border: 0;
-            margin: 0 auto;
-          }
-          .save-btn {
-            width: 100%;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-            margin-top: 15px;
-            border-radius: 3px;
-            box-sizing: border-box;
-            background-color: #e64340;
-            color: #fff;
-          }
-          button[type="default"] {
-            background-color: #f1f1f1;
-            color: #000;
-          }
-        }
-      }
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: #f2f2f2
     }
+
+    /*登录图片*/
+    .login-icon {
+      flex: none;
+    }
+    .login-img {
+      width: 750 rpx;
+    }
+
+    /*表单内容*/
+    .login-from {
+      margin-top: 20px;
+      flex: auto;
+      height: 100%;
+    }
+
+    .inputView {
+      background-color: #fff;
+      line-height: 44px;
+    }
+    /*输入框*/
+    .nameImage, .keyImage {
+      margin-left: 22px;
+      width: 14px;
+      height: 14px
+    }
+
+    .loginLab {
+      margin: 15px 15px 15px 10px;
+      color: #545454;
+      font-size: 14px
+    }
+    .inputText {
+      flex: block;
+      float: right;
+      text-align: right;
+      margin-right: 22px;
+      margin-top: 11px;
+      color: #cccccc;
+      font-size: 14px
+    }
+
+    .line {
+      width: 100%;
+      height: 1px;
+      background-color: #cccccc;
+      margin-top: 1px;
+    }
+    /*按钮*/
+    .loginBtnView {
+      width: 100%;
+      height: auto;
+      background-color: #f2f2f2;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      padding-bottom: 0px;
+    }
+
+    .loginBtn {
+      width: 80%;
+      margin-top: 35px;
+    }
+
   }
 </style>
