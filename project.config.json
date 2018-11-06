@@ -4,7 +4,7 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
@@ -42,7 +42,7 @@
 				{
 					"id": 0,
 					"name": "jingqu",
-					"pathName": "pages/logs/main",
+					"pathName": "pages/instrustor/main",
 					"query": ""
 				}
 			]

@@ -84,6 +84,7 @@
             if(res.result){
               that.show = true;
               that.content = res.result;
+
             }
           }
         })

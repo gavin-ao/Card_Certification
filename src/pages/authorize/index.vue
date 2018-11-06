@@ -72,17 +72,50 @@
             duration: 2000
           })
         } else {
-          wx.setStorageSync("userName", this.userName)
-          wx.setStorageSync("password", this.password)
-          // 这里修改成跳转的页面
-          utils.login(this, false, function (sessionID, actId) {
-            console.log(md5.hex_md5(this.password))
-            wx.showToast({
-              title: '登录成功',
-              icon: 'success',
-              duration: 2000
-            })
-          });
+          var that = this;
+          wx.request({
+            // url: url,
+            url: " /service/verification_login",
+            method: "POST",
+            data: {
+              userName: that.userName,
+              pwd: md5.hex_md5(that.password)
+            },
+            header: {'content-type': 'application/x-www-form-urlencoded'},
+            success: function (res) {
+              if (res.data.success) {
+                wx.setStorageSync("userName", that.userName);
+                wx.setStorageSync("password", that.password);
+                wx.setStorageSync("userId", res.data.userId);
+                wx.setStorageSync("storeId", res.data.storeId);
+                var userId = res.data.userId;
+                var storeId = res.data.storeId;
+                // 这里修改成跳转的页面
+                utils.login(this, false, function (sessionID, actId) {
+                  console.log(md5.hex_md5(this.password))
+                  wx.request({
+                    // url: url,
+                    url: "/wechatapi/wsva/execuVerificationBind",
+                    method: "POST",
+                    data: {
+                      sessionID:sessionID,
+                      userId: userId,
+                      storeId: storeId
+                    },
+                    header: {'content-type': 'application/x-www-form-urlencoded'},
+                    success: function (res) {
+                      if (res.data.success) {
+                        wx.redirectTo({
+                          url: '/pages/instrustor/main'
+                        })
+                      }
+                    }
+                  })
+                });
+              }
+            }
+          })
+
         }
 
 
