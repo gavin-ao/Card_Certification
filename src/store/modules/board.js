@@ -7,10 +7,10 @@ const state = {
   nickName: '',
   avatarUrl: '',
   sessionID:'',
-  appid:'wx7ce4b9ce272d1817',
-  secret:'d946a8de0df55661af48b97fa6de4d9b',
-  // urlHttp:'https://dataanalysis.easy7share.com'
-  urlHttp:'https://dataanalysis-cs.easy7share.com'
+  appid:'wx771584fe44b2912e',
+  secret:'670e80181ffb64f1a49dcd8228241c1b',
+  urlHttp:'https://cm-service-card.easy7share.com'
+  // urlHttp:'https://cm-service-card.easy7share.com' //核销小程序
 }
 
 export default {

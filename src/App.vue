@@ -6,30 +6,43 @@
     },
     onShow(option) {
       console.log(option)
-      var that = this
-      var userName = wx.getStorageSync("userName");
-      var password = wx.getStorageSync("password");
-      if(userName&&password){
-        wx.getSetting({
-          success: function (res) {
-            if (res.authSetting['scope.userInfo']) {
-              utils.login(that, function (sessionID, actId) {
-                wx.redirectTo({
-                  url: '/pages/instrustor/main'
-                })
-              })
-            }else{
-              wx.redirectTo({
-                url: '/pages/authorize/main'
-              })
-            }
-          }
-        })
-      }else{
+      var that = this;
+      if(option.path =="pages/wechatLogin/main"){
         wx.redirectTo({
           url: '/pages/authorize/main'
         })
       }
+      // wx.getSetting({
+      //   success: function (res) {
+      //     if (res.authSetting['scope.userInfo']) {
+      //       utils.login(that, function (sessionID) {
+      //         wx.request({
+      //           url: that.$store.state.board.urlHttp + "/wechatapi/wsva/getAuthorization",
+      //           method: "POST",
+      //           data: {
+      //             sessionID:sessionID,
+      //           },
+      //           header: {'content-type': 'application/x-www-form-urlencoded'},
+      //           success: function (res) {
+      //             if (res.data.success) {
+      //               wx.redirectTo({
+      //                 url: '/pages/instrustor/main'
+      //               })
+      //             }else{
+      //               wx.redirectTo({
+      //                 url: '/pages/authorize/main'
+      //               })
+      //             }
+      //           }
+      //         })
+      //       })
+      //     }else{
+      //       wx.redirectTo({
+      //         url: '/pages/authorize/main'
+      //       })
+      //     }
+      //   }
+      // })
 
     },
     created() {

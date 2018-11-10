@@ -10,7 +10,7 @@
         <div class="inputView">
           <img class="nameImage" src="/static/images/user.png"/>
           <label class="loginLab">账号</label>
-          <input class="inputText" placeholder="请输入账号" @change="phoneInput"/>
+          <input class="inputText" placeholder="请输入账号" @input="phoneInput"/>
         </div>
         <div class="line"></div>
 
@@ -18,7 +18,7 @@
         <div class="inputView">
           <img class="keyImage" src="/static/images/password.png"/>
           <label class="loginLab">密码</label>
-          <input class="inputText" password="true" placeholder="请输入密码" @change="passwordInput"/>
+          <input class="inputText" password="true" placeholder="请输入密码" @input="passwordInput"/>
         </div>
 
         <!--按钮-->
@@ -74,8 +74,7 @@
         } else {
           var that = this;
           wx.request({
-            // url: url,
-            url: " /service/verification_login",
+            url:that.$store.state.board.urlHttp + "/service/verification_login",
             method: "POST",
             data: {
               userName: that.userName,
@@ -83,35 +82,17 @@
             },
             header: {'content-type': 'application/x-www-form-urlencoded'},
             success: function (res) {
+              console.log(res)
               if (res.data.success) {
                 wx.setStorageSync("userName", that.userName);
                 wx.setStorageSync("password", that.password);
                 wx.setStorageSync("userId", res.data.userId);
                 wx.setStorageSync("storeId", res.data.storeId);
-                var userId = res.data.userId;
-                var storeId = res.data.storeId;
-                // 这里修改成跳转的页面
-                utils.login(this, false, function (sessionID, actId) {
-                  console.log(md5.hex_md5(this.password))
-                  wx.request({
-                    // url: url,
-                    url: "/wechatapi/wsva/execuVerificationBind",
-                    method: "POST",
-                    data: {
-                      sessionID:sessionID,
-                      userId: userId,
-                      storeId: storeId
-                    },
-                    header: {'content-type': 'application/x-www-form-urlencoded'},
-                    success: function (res) {
-                      if (res.data.success) {
-                        wx.redirectTo({
-                          url: '/pages/instrustor/main'
-                        })
-                      }
-                    }
-                  })
-                });
+                wx.redirectTo({
+                  url: '/pages/wechatLogin/main'
+                })
+              }else{
+
               }
             }
           })
@@ -158,9 +139,11 @@
 
     /*表单内容*/
     .login-from {
-      margin-top: 20px;
       flex: auto;
-      height: 100%;
+      width: 80%;
+      margin: 0 auto;
+      margin-top: 20px;
+      /*height: 100%;*/
     }
 
     .inputView {
@@ -180,13 +163,15 @@
       font-size: 14px
     }
     .inputText {
-      flex: block;
+      /*flex: block;*/
+      display: inline-block;
       float: right;
-      text-align: right;
-      margin-right: 22px;
+      /*text-align: right;*/
+      /*margin-right: 22px;*/
       margin-top: 11px;
       color: #cccccc;
-      font-size: 14px
+      font-size: 14px;
+      width: 60%;
     }
 
     .line {
