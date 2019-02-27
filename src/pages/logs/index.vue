@@ -29,7 +29,7 @@ export default {
               success: function (res) {
                 if (res.data.success) {
                   wx.redirectTo({
-                    url: '/pages/instrustor/main'
+                    url: '/pages/scanCode/main'
                   })
                 }else{
                   wx.redirectTo({

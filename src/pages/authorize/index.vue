@@ -53,13 +53,11 @@
 
 // 获取输入账号
       phoneInput: function (e) {
-        console.log(e)
         this.userName = e.target.value.trim()
       },
 
       // 获取输入密码
       passwordInput: function (e) {
-        console.log(e)
         this.password = e.target.value.trim()
       },
 
@@ -82,17 +80,20 @@
             },
             header: {'content-type': 'application/x-www-form-urlencoded'},
             success: function (res) {
-              console.log(res)
               if (res.data.success) {
                 wx.setStorageSync("userName", that.userName);
                 wx.setStorageSync("password", that.password);
                 wx.setStorageSync("userId", res.data.userId);
                 wx.setStorageSync("storeId", res.data.storeId);
-                wx.redirectTo({
+                wx.navigateTo({
                   url: '/pages/wechatLogin/main'
                 })
               }else{
-
+                wx.showToast({
+                  title: res.data.msg,
+                  icon: 'none',
+                  duration: 1500
+                })
               }
             }
           })

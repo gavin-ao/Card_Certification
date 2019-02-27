@@ -41,7 +41,13 @@
             success: function (res) {
               if (res.data.success) {
                 wx.redirectTo({
-                  url: '/pages/instrustor/main'
+                  url: '/pages/scanCode/main'
+                })
+              }else{
+                wx.showToast({
+                  title: res.data.msg,
+                  icon: 'none',
+                  duration: 2500
                 })
               }
             }
